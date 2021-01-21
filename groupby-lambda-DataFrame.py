@@ -1,15 +1,13 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
+#-------------------
+# Author: Iman Irajian
+# 		  iman.irajian@gmail.com
+# Subject: A closer look at groupby() and lambda on the Pandas DataFrame
+#
+# Date: Thursday, January 21, 2021
+#-------------------
 
 import pandas as pd
 import numpy as np
-
-
-# In[2]:
-
 
 products_raw = {"Apple": {"price":1000, "weight":10},
                 "Camera": {"price":80000, "weight":100},
@@ -28,22 +26,13 @@ transaction_raw = {0: {"product":"Apple", "count":3, "discount":500, "date":"01-
                    8: {"product":"Camera", "count":4, "discount":9000, "date":"08-08-2020"}}
 
 
-# In[3]:
-
 
 products = pd.DataFrame(products_raw).T
 print( products )
 
 
-# In[4]:
-
-
 transactions = pd.DataFrame(transaction_raw).T
 print( transactions )
-
-
-# In[5]:
-
 
 
 # sort products by price
@@ -54,30 +43,15 @@ print( transactions )
 print( products.sort_values(by="price") )
 
 
-# In[6]:
-
-
-
 # sort products by price descendingly
 print( products.sort_values(by="price", ascending=False) )
-
-
-# In[7]:
-
 
 
 # Lets sort by print(index
 print( products.sort_index() )
 
 
-# In[8]:
-
-
 print( transactions )
-
-
-# In[9]:
-
 
 
 # How many distinct transactions are according to the names of products?
@@ -85,24 +59,12 @@ print( len( transactions.groupby("product") ) )
 print( transactions.groupby("product").ngroups )
 
 
-# In[10]:
-
-
-
 # How many times each products have been sold?
 print( transactions.groupby("product").sum()["count"] )
 
 
-# In[11]:
-
-
-
 # Maximum discount for each products?
 print( transactions.groupby("product").max()["discount"] )
-
-
-# In[12]:
-
 
 
 # Minimum of each feature with respect to distinct product names
@@ -115,10 +77,6 @@ print( transactions.groupby("product").agg("min") )
 print( transactions.groupby("product").aggregate("min") )
 
 
-# In[13]:
-
-
-
 # Total price of each product
 # We need to join products to see the price of each product
 trans_prods = transactions.join(products, on="product")
@@ -128,14 +86,7 @@ print(trans_prods)
 trans_prods.groupby("product").apply(lambda g: print( g["product"].values[0] + ":\t", (g["count"]*g["price"]-g["discount"]).sum() ))
 
 
-# In[14]:
-
-
 print( transactions.join(products, on="product") )
-
-
-# In[15]:
-
 
 
 # Pass custom function to calculate total weight for each transaction
@@ -145,16 +96,8 @@ def get_total_weight(group):
 print( transactions.join(products, on="product").groupby("product").apply(get_total_weight) )
 
 
-# In[16]:
-
-
-
 # Maximum discount for each products?
 print( transactions.groupby("product").max()["discount"] )
-
-
-# In[17]:
-
 
 
 # Think about the output
@@ -163,10 +106,6 @@ def f(column):
     return len(column.name)
     
 print( transactions.groupby("product").agg(f) )
-
-
-# In[18]:
-
 
 
 # Putting all together
